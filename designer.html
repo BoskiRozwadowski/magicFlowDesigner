@@ -23,6 +23,7 @@
             left: 35em;
             top: 12em;
             width: 7em;
+            text-align: center;
         }
     </style>
 
@@ -39,8 +40,6 @@
                 snap: '#content'});
         }
  function addActivity(){
-alert('super');
-
      $("body").append('<div class = "mmd" id="makeMeDraggable">Nowy krok</div>');
          $('.mmd').draggable({    containment: '#content',
              cursor: 'move',
