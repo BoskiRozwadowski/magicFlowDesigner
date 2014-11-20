@@ -1,0 +1,27 @@
+How To Use
+Step 1: together with JQuery, include jquery.leanModal.min.js in your page, thusly:
+
+<script type="text/javascript" src="path_to/jquery.leanModal.min.js"></script>
+Step 2: rather than call another stylesheet, simply include the following overlay style block in your existing stylesheet. Additionally, be sure to hide your modal element with 'display: none;' (although that probably goes without saying).
+
+#lean_overlay {
+    position: fixed;
+    z-index:100;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+    background: #000;
+    display: none;
+}
+Step 3: call the function on your modal trigger, as follows. Be sure to set the href attribute of your trigger anchor to match the id of your target element.
+
+$("#trigger_id").leanModal();
+...or, if you want more than one modal window on the same page, simply add the 'rel' attribute to your triggers, and call the function by attribute, like so:
+
+$("a[rel*=leanModal]").leanModal();
+Options
+In the spirit of keeping things simple, there are only two three options involved: vertical position of the modal element in relation to the document body (default is 100px from the top), the overlay opacity (default is 0.5), and a close button option (default null). You can override these defaults by passing your desired values to the function, like so:
+
+$("#trigger_id").leanModal({ top : 200, overlay : 0.4, closeButton: ".modal_close" });
+Simple, and sweet.
