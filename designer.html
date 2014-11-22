@@ -75,6 +75,13 @@
             return uuid;
         };
 
+function idvalidate()
+{
+var name =  $('#name').val();
+    var name1 =  name.replace(/([.*+?^${}()|\[\]\/\\])/g, "_");
+
+    $('#name').val(name1);
+}
 
 function editActivity(aid){
     var name = $(aid).attr('id');
@@ -159,7 +166,7 @@ function changeActivityName(aid) {
     <div style = "width:100%; margin: 5%" >
         <table style="width:100%; float:left">
             <tr><td style="width:40%; text-align: left"><p style="font: normal 16px Arial, Georgia, Tahoma, Helvetica, sans-serif; font-style: normal; color: #535353;">ID kroku</p></td>
-                <td style="width: 60%"> <input id= "name" style="width: 80%"></input></td></tr>
+                <td style="width: 60%"> <input id= "name" style="width: 80%" onchange="return idvalidate()"></input></td></tr>
             <tr><td style="width:40%; text-align: left"><p style="font: normal 16px Arial, Georgia, Tahoma, Helvetica, sans-serif; font-style: normal; color: #535353;">Nazwa kroku</p></td>
                 <td style="width: 60%"> <input id = "fullname" style="width: 80%"></input></td></tr>
         </table>
