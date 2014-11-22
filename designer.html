@@ -7,9 +7,9 @@
 <head>
 
     <style>
-        #makeMeDraggable {
+        .makeMeDraggable {
 
-            background-color: white;
+            background-color: #0199c9;
             border: 1px solid #2e6f9a;
             border-radius: 8px;
             box-shadow: 2px 2px 19px #e0e0e0;
@@ -24,11 +24,12 @@
             top: 12em;
             width: 7em;
             text-align: center;
+            color: white;
 
         }
 
 
-        }
+
     </style>
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -40,33 +41,94 @@
     <script type="text/javascript" src="ext/jquery.leanModal_mod.js"></script>
     <script type="text/javascript" src="ext/fx.js"></script>
     <script type="text/javascript" src="ext/rflow.js"></script>
+    <link href="ext/style6.css" rel="stylesheet" type="text/css" />
+    <link href="ext/style_form.css" rel="stylesheet" type="text/css" />
     <link href="ext/rflow.css" rel="stylesheet" type="text/css" />
     <link href="rflow.css" rel="stylesheet" type="text/css" />
-
 
     <script type="text/javascript">
 
         $( init );
         $('#fullname').val("");
         $('#name').val("");
-
+        $('#fullname1').val("");
+        $('#name1').val("");
 
         function init() {
-            $('#makeMeDraggable').draggable({    containment: '#content',
+            $('.makeMeDraggable').draggable({    containment: '#content',
                 cursor: 'move',
                 snap: '#content'});
             $('#dialog-form').hide();
         }
+        function close_modal(modal_id) {
+            $("#lean_overlay").fadeOut(200);
+            $(modal_id).css({
+                "display": "none"
+            });}
+        function generateUUID(){
+            var d = new Date().getTime();
+            var uuid = 'xxxx'.replace(/[xy]/g, function(c) {
+                var r = (d + Math.random()*16)%16 | 0;
+                d = Math.floor(d/16);
+                return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+            });
+            return uuid;
+        };
+
+
+function editActivity(aid){
+    var name = $(aid).attr('id');
+    var fullname = $(aid).attr('value');
+    $('#fullname1').val(fullname);
+    $('#name1').val(name);
+    $('#logout_popup_yes1').attr('onClick', 'return changeActivityName('+name+')');
+    $('#logout_popup_delete').attr('onClick', 'return deleteActivity('+name+')');
+
+    $( "#tabs" ).tabs({
+        collapsible: true
+    });
+
+    var o = { top : 20, overlay : 0.4, closeButton: ".modal_close" };
+
+    var modal_id = '#logout_popup1';
+    $("#lean_overlay").click(function () {
+        close_modal(modal_id);
+    });
+    $(o.closeButton).click(function () {
+        close_modal(modal_id);
+    });
+    var modal_height = $(modal_id).outerHeight();
+    var modal_width = $(modal_id).outerWidth();
+    $("#lean_overlay").css({
+        "display": "block",
+        opacity: 0
+    });
+    $("#lean_overlay").fadeTo(200, o.overlay);
+    $(modal_id).css({
+        "display": "block",
+        "position": "fixed",
+        "opacity": 0,
+        "z-index": 11000,
+        "left": 50 + "%",
+        "margin-left": -(modal_width / 2) + "px",
+        "top": o.top + "px"
+    });
+    $(modal_id).fadeTo(200, 1);
+    e.preventDefault()
 
 
 
+}
+function activityUser(){
+    alert ('Zmiana użytkownika');
+}
         function addActivity(){
             var name = $('#name').val();
             var fullname = $('#fullname').val();
-
+var name = name + '_' + generateUUID()
      if (name != null) {
-         $("body").append('<div class = "mmd" id="makeMeDraggable" ver="'+ name +'">'+ fullname +'</div>');
-         $('.mmd').draggable({    containment: '#content',
+         $("body").append('<div class = "makeMeDraggable" id="'+ name +'" value="'+ fullname +'">'+ fullname +'<img src="tool_settings_ico.png"  title="Ustawienia" style="position:absolute; top: -1px; right:-1px; z-index:10; cursor: pointer; width:25%" onClick="return editActivity('+name+')" /><img src="ext/lmenu_subs_ico_hover.png" style="width: 45%; position: absolute; right: 30px; top:70%; cursor: context-menu" title="Użytkownik: Nie wskazano" onClick="return activityUser('+name+')"/></div>');
+         $('.makeMeDraggable').draggable({    containment: '#content',
              cursor: 'move',
              snap: '#content'});
          $('#fullname').val("");
@@ -74,13 +136,19 @@
      }
      }
 
-        function addActivity2() {
-            $('#logout_popup').dialog();
+function changeActivityName(aid) {
+    var fullname = $('#fullname1').val();
+    var name = $(aid).attr('id');
+    $(aid).attr('value', fullname);
+    $(aid).text(fullname);
+    $(aid).prepend('<img src="tool_settings_ico.png"  title="Ustawienie" style="position:absolute; top: -1px; right:-1px; z-index:10; cursor: pointer; width:25%" onClick="return editActivity(' + name + ')" />    ')
+    $(aid).prepend('<img src="ext/lmenu_subs_ico_hover.png" style="width: 45%; position: absolute; right: 30px; top:70%"/>')
+}
+        function deleteActivity(aid)
+        {
+            $(aid).remove();
 
-
-
-        };
-
+        }
 
     </script>
 
@@ -104,8 +172,49 @@
     <div id="logout_popup_yes" onClick="return addActivity()" class="modal_close">
         Tak, potwierdzam
     </div>
+
 </div>
-<div id="content" style="height: 600px; width: 95%; border: solid blue">
+
+<div id="logout_popup1" class="popup">
+    <div style = "width:100%; margin: 5%" >
+
+             <div id="tabs" style="width: 90%; height: 70%">
+                <ul>
+                <li><a href="#tabs-1">Dane podstawowe</a></li>
+                <li><a href="#tabs-2">Zmienne</a></li>
+                <li><a href="#tabs-3">Formularz</a></li>
+                </ul>
+            <div id="tabs-1" style="height: 400px">
+                <table style="width:100%; float:left">
+                    <tr><td style="width:40%; text-align: left"><p style="font: normal 16px Arial, Georgia, Tahoma, Helvetica, sans-serif; font-style: normal; color: #535353;">ID kroku</p></td>
+                        <td style="width: 60%"> <input id= "name1" style="width: 80%" disabled="disabled"></input></td></tr>
+                    <tr><td style="width:40%; text-align: left"><p style="font: normal 16px Arial, Georgia, Tahoma, Helvetica, sans-serif; font-style: normal; color: #535353;">Nazwa kroku</p></td>
+                        <td style="width: 60%"> <input id = "fullname1" style="width: 80%"></input></td></tr>
+                </table>
+
+                 </div>
+            <div id="tabs-2">
+                <p><strong>Click this tab again to close the content pane.</strong></p>
+                <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
+            </div>
+            <div id="tabs-3">
+                <p><strong>Click this tab again to close the content pane.</strong></p>
+                <p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+            </div>
+        </div>
+
+    </div>
+    <div id="logout_popup_delete" class="modal_close">
+        Usuń krok
+    </div>
+    <div id="logout_popup_no1" class="modal_close">
+        Rezygnuję
+    </div>
+    <div id="logout_popup_yes1"  class="modal_close">
+Zapisz zmiany    </div>
+
+</div>
+<div id="content" style="height: 600px; width: 95%; border: solid blue; background: white">
 
 </div>
 

@@ -27,6 +27,7 @@ $(document).ready(function() {
     $("a[rel*=leanModal]").leanModal({ top : 20, overlay : 0.4, closeButton: ".modal_close" });
     $("#menu_tool_logout").leanModal({ top : 20, overlay : 0.4, closeButton: ".modal_close" });
     $("#add_new_activity").leanModal({ top : 20, overlay : 0.4, closeButton: ".modal_close" });
+    $("#edit_activity").leanModal({ top : 20, overlay : 0.4, closeButton: ".modal_close" });
 
 
     //attach new action menu
